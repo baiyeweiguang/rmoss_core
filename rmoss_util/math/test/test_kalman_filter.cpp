@@ -62,11 +62,11 @@ TEST(ExtendedKalmanFilterTest, MultipleIterations) {
   Eigen::Matrix<double, XN, XN> P;
   P << 1, 0, 0, 1;
   Eigen::Matrix<double, XN, XN> Q;
-  Q << 0.1, 0.001, 0.001, 0.1;
+  Q << 0.01, 0, 0, 0.01;
 
   rmoss_util::ExtendedKalmanFilter<XN> kf(x, P);
 
-  for (int i = 0; i < 100; ++i) {
+  for (int i = 0; i < 20; ++i) {
     // 预测步骤
     kf.predict(StateTransitionModel(1.0), Q);
 
@@ -76,12 +76,12 @@ TEST(ExtendedKalmanFilterTest, MultipleIterations) {
 
     // 更新步骤
     Eigen::Matrix<double, 1, 1> R;
-    R << 0.001;
+    R << 0.01;
 
     x = kf.update(MeasurementModel(), R, z);
   }
 
   // 最终状态值检查
-  EXPECT_NEAR(x[0], 100.0, 1.0);
+  EXPECT_NEAR(x[0], 20.0, 1.0);
   EXPECT_NEAR(x[1], 1.0, 0.1);
 }

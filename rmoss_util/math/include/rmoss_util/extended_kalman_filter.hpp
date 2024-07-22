@@ -101,12 +101,12 @@ public:
     }
 
     // 状态转移
-    f(x_jet);
+    auto x_p_jet = f(x_jet);
 
     // 获取雅可比矩阵同时更新状态量
     for (int i = 0; i < XN; ++i) {
-      x_(i) = x_jet[i].a;
-      F_.row(i) = x_jet[i].v.transpose();
+      x_(i) = x_p_jet[i].a;
+      F_.row(i) = x_p_jet[i].v.transpose();
     }
 
     P_ = F_ * P_ * F_.transpose() + Q;
