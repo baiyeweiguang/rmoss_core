@@ -41,6 +41,7 @@ ament_export_dependencies(OpenCV)
 ament_export_dependencies(rmoss_interfaces)
 ament_export_dependencies(rcpputils)
 ament_export_dependencies(ament_index_cpp)
+ament_export_dependencies(eigen3_cmake_module)
 ament_export_dependencies(Eigen3)
 ament_export_dependencies(Ceres)
 
