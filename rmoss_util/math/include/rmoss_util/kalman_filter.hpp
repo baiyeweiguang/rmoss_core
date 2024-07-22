@@ -159,6 +159,10 @@ public:
     return x_;
   }
 
+  VectorX get_state() const {return x_;}
+
+  MatrixXX get_covariance() const {return P_;}
+
 private:
   // 当前状态分布的均值
   VectorX x_;
