@@ -26,7 +26,7 @@ constexpr unsigned int XN = 2;
 // 定义状态转移方程
 struct StateTransitionModel
 {
-  StateTransitionModel(double dt)
+  explicit StateTransitionModel(double dt)
   : dt_(dt) {}
   template<typename T>
   Eigen::Matrix<T, XN, 1> operator()(const Eigen::Matrix<T, XN, 1> & x) const
