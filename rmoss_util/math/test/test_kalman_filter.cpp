@@ -18,7 +18,7 @@
 
 #include <random>
 
-#include "rmoss_util/kalman_filter.hpp"
+#include "rmoss_util/extended_kalman_filter.hpp"
 
 // 状态量维度
 constexpr unsigned int XN = 2;
@@ -52,7 +52,7 @@ struct MeasurementModel
   }
 };
 
-TEST(KalmanFilterTest, MultipleIterations) {
+TEST(ExtendedKalmanFilterTest, MultipleIterations) {
   std::random_device rd;
   std::mt19937 gen(rd());
   std::normal_distribution<double> dist(0.0, 0.1);
@@ -64,7 +64,7 @@ TEST(KalmanFilterTest, MultipleIterations) {
   Eigen::Matrix<double, XN, XN> Q;
   Q << 0.1, 0.001, 0.001, 0.1;
 
-  rmoss_util::KalmanFilter<XN> kf(x, P);
+  rmoss_util::ExtendedKalmanFilter<XN> kf(x, P);
 
   for (int i = 0; i < 100; ++i) {
     // 预测步骤

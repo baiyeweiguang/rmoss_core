@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef RMOSS_UTIL__KALMAN_FILTER_HPP_
-#define RMOSS_UTIL__KALMAN_FILTER_HPP_
+#ifndef RMOSS_UTIL__EXTENDED_KALMAN_FILTER_HPP_
+#define RMOSS_UTIL__EXTENDED_KALMAN_FILTER_HPP_
 
 #include <Eigen/Dense>
 #include <ceres/ceres.h>
@@ -49,20 +49,20 @@ namespace rmoss_util
 {
 
 /**
- * @class KalmanFilter
+ * @class ExtendedKalmanFilter
  *
  * @brief 可自动微分的扩展卡尔曼滤波器
  *
  * @param XN 状态量维度
  */
 template<int XN>
-class KalmanFilter
+class ExtendedKalmanFilter
 {
   using VectorX = Eigen::Matrix<double, XN, 1>;
   using MatrixXX = Eigen::Matrix<double, XN, XN>;
 
 public:
-  KalmanFilter(const VectorX & x, const MatrixXX & P)
+  ExtendedKalmanFilter(const VectorX & x, const MatrixXX & P)
   : x_(x), P_(P) {}
 
   /**
@@ -174,4 +174,4 @@ private:
   MatrixXX F_;
 };
 }  // namespace rmoss_util
-#endif  // RMOSS_UTIL__KALMAN_FILTER_HPP_
+#endif  // RMOSS_UTIL__EXTENDED_KALMAN_FILTER_HPP_
