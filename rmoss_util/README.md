@@ -14,6 +14,7 @@ rmoss_util是rmoss_core 中的一个公共基础包，提供一些公共基础�
 * `time_utils.hpp/cpp`（不建议使用，开发中） : 时间工具，用于测量运行时间。
 * `mono_measure_tool.hpp/cpp`（不建议使用，开发中） : 单目测量工具类，单目算法封装（PNP解算，相似三角形反投影等）
 * `url_resolver.hpp/cpp` : URL 解析器，用于解析类似 camera_info_manager 的 URL，便于灵活路径管理
+* `kalman_filter.hpp/cpp`:卡尔曼滤波器，利用Ceres的自动微分功能实现雅克比矩阵的自动求解
 
 ## 快速使用
 
@@ -105,3 +106,45 @@ std::result = rmoss_util::URLResolver::getResolvedPath(url);  // result = "<rmos
 std::string url = "file:///test_dir/test_file";
 std::result = rmoss_util::URLResolver::getResolvedPath(url);  // result = "/test_dir/test_file"
 ```
+
+### 卡尔曼滤波器
+
+下面是一个1维匀速运动的卡尔曼滤波示例。
+
+```cpp
+struct Predict {
+  Predict(double dt) : dt(dt) {}
+    
+  Eigen::Matrix<T, 2, 1> operator()(
+    const Eigen::Matrix<T, 2, 1> & x) const
+  {
+    Eigen::Matrix<T, 2, 1> x_new;
+    x_new[0] = x[0] + x[1] * dt;
+    x_new[1] = x[1];
+    return x_new;
+  }
+  
+  double dt;  
+};
+
+struct Measure {
+  Eigen::Matrix<T, 1, 1> operator()(
+    const Eigen::Matrix<T, 1, 1> & x) const
+  {
+    Eigen::Matrix<T, 1, 1> z;
+    z[0] = x[0];
+    return z;
+  }
+};
+
+// x: 初始状态, P: 初始协方差矩阵
+rmoss_util::KalmanFilter<2> ekf(x, P);
+
+for (int i = 0; i < 10; i++) {
+  // 预测步
+  ekf.predict(Predict(0.05), Q);  // Q: 过程噪声
+  // 更新步  
+  Eigen::Vector2d x_p = ekf.update(Measure(), R, z);  // R: 观测噪声, z: 观测量  
+}
+```
+
